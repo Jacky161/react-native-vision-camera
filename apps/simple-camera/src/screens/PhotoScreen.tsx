@@ -3,14 +3,14 @@ import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { type Image, NitroImage } from 'react-native-nitro-image'
-import type { Photo } from 'react-native-vision-camera'
+import type { PhotoFile } from 'react-native-vision-camera'
 import { FullOverlay } from '../components/FullOverlay'
 import { IconButton } from '../components/IconButton'
 import { Row } from '../components/Row'
 import { useSafeAreaPadding } from '../hooks/useSafeAreaPadding'
 
 type Props = StaticScreenProps<{
-  photo: Photo
+  photo: PhotoFile
 }>
 
 export function PhotoScreen({
@@ -20,21 +20,11 @@ export function PhotoScreen({
 }: Props) {
   const navigation = useNavigation()
   const safePadding = useSafeAreaPadding()
-  const [image, setImage] = useState<Image>()
-
-  useEffect(() => {
-    const load = async () => {
-      const i = await photo.toImageAsync()
-      setImage(i)
-      photo.dispose()
-    }
-    load()
-  }, [photo])
 
   return (
     <View style={[styles.container, safePadding]}>
-      {image != null ? (
-        <NitroImage style={styles.image} resizeMode="contain" image={image} />
+      {photo != null ? (
+        <NitroImage style={styles.image} resizeMode="contain" image={{ filePath: photo.filePath }} />
       ) : (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="small" color="white" />

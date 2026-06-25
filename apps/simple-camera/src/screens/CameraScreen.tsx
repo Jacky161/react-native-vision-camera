@@ -60,7 +60,9 @@ export function CameraScreen() {
     console.log(`Location: ${l.latitude} ${l.longitude}`)
   }, [location.currentLocation])
 
-  const photoOutput = usePhotoOutput({})
+  const photoOutput = usePhotoOutput({
+    containerFormat: 'dng'
+  })
   const videoOutput = useVideoOutput({
     enableAudio: true,
   })
@@ -154,7 +156,7 @@ export function CameraScreen() {
     try {
       console.log(`Capturing Photo...`)
       const start = performance.now()
-      const photo = await photoOutput.capturePhoto(
+      const photo = await photoOutput.capturePhotoToFile(
         {
           location: location.currentLocation,
         },
@@ -163,7 +165,7 @@ export function CameraScreen() {
       const end = performance.now()
       const duration = (end - start).toFixed(2)
       console.log(
-        `Captured ${photo.width}x${photo.height} ${photo.containerFormat} Photo in ${duration}ms!`,
+        `Captured Photo in ${duration}ms!`,
       )
       navigation.navigate('Photo', { photo: photo })
     } catch (e) {
